@@ -1,0 +1,112 @@
+Starting Dynare (version 6.1).
+Calling Dynare with arguments: none
+Starting preprocessing of the model file ... 
+Found 6 equation(s). 
+Evaluating expressions... 
+Computing static model derivatives (order 1). 
+Normalizing the static model... 
+Normalization failed with cutoff, trying symbolic normalization... 
+Finding the optimal block decomposition of the static model... 
+4 block(s) found: 
+  3 recursive block(s) and 1 simultaneous block(s). 
+  the largest simultaneous block has 3 equation(s) 
+                                 and 3 feedback variable(s). 
+Computing dynamic model derivatives (order 2). 
+Normalizing the dynamic model... 
+Finding the optimal block decomposition of the dynamic model... 
+2 block(s) found: 
+  1 recursive block(s) and 1 simultaneous block(s). 
+  the largest simultaneous block has 4 equation(s) 
+                                 and 4 feedback variable(s). 
+Preprocessing completed. 
+Preprocessing time: 0h00m00s.
+
+STEADY-STATE RESULTS:
+
+y  		 0
+pi 		 0
+i  		 0
+e  		 0
+s  		 0
+rp 		 0
+
+EIGENVALUES:
+         Modulus             Real        Imaginary
+             0.5              0.5                0
+             0.6              0.6                0
+          0.6709           0.6709                0
+               1                1                0
+           1.023            1.023         0.004477
+           1.023            1.023        -0.004477
+
+There are 2 eigenvalue(s) larger than 1 in modulus for 2 forward-looking variable(s)
+The rank condition is verified.
+
+
+MODEL SUMMARY
+
+  Number of variables:         6
+  Number of stochastic shocks: 4
+  Number of state variables:   4
+  Number of jumpers:           2
+  Number of static variables:  0
+
+
+MATRIX OF COVARIANCE OF EXOGENOUS SHOCKS
+Variables       eps_s    eps_rp     eps_u     eps_i
+eps_s        0.250000  0.000000  0.000000  0.000000
+eps_rp       0.000000  0.160000  0.000000  0.000000
+eps_u        0.000000  0.000000  0.090000  0.000000
+eps_i        0.000000  0.000000  0.000000  0.040000
+
+POLICY AND TRANSITION FUNCTIONS
+                                   y              pi               i               e               s              rp
+i(-1)                      -1.751645        0.140722        0.670891        0.670891               0               0
+e(-1)                              0               0               0        1.000000               0               0
+s(-1)                      -0.274466       -0.033606       -0.034615        0.025385        0.600000               0
+rp(-1)                     -0.333641        0.240782        0.110004        0.610004               0        0.500000
+eps_s                      -0.457443       -0.056009       -0.057692        0.042308        1.000000               0
+eps_rp                     -0.667282        0.481564        0.220008        1.220008               0        1.000000
+eps_u                      -1.351269        1.108557        0.517544        0.517544               0               0
+eps_i                      -2.502350        0.201031        0.958416        0.958416               0               0
+
+
+THEORETICAL MOMENTS
+VARIABLE         MEAN  STD. DEV.   VARIANCE
+y              0.0000     1.0536     1.1101
+pi             0.0000     0.4137     0.1711
+i              0.0000     0.3924     0.1539
+e                 NaN        NaN        NaN
+s              0.0000     0.6250     0.3906
+rp             0.0000     0.4619     0.2133
+
+
+
+VARIANCE DECOMPOSITION (in percent)
+       eps_s  eps_rp   eps_u   eps_i
+y       5.63   26.42   26.92   41.03
+pi      0.99   32.15   65.15    1.72
+i       3.61   24.51   28.48   43.40
+s     100.00    0.00    0.00    0.00
+rp      0.00  100.00    0.00    0.00
+
+
+
+MATRIX OF CORRELATIONS
+Variables          y       pi        i        s       rp
+y             1.0000  -0.6546  -0.9326  -0.2111  -0.4196
+pi           -0.6546   1.0000   0.6856  -0.0969   0.5637
+i            -0.9326   0.6856   1.0000  -0.1538   0.3897
+s            -0.2111  -0.0969  -0.1538   1.0000   0.0000
+rp           -0.4196   0.5637   0.3897   0.0000   1.0000
+
+
+
+COEFFICIENTS OF AUTOCORRELATION
+Order          1       2       3       4       5
+y         0.7041  0.4873  0.3334  0.2263  0.1528
+pi        0.2480  0.1506  0.0932  0.0586  0.0374
+i         0.7298  0.5200  0.3645  0.2527  0.1738
+s         0.6000  0.3600  0.2160  0.1296  0.0778
+rp        0.5000  0.2500  0.1250  0.0625  0.0312
+Total computing time : 0h00m04s
