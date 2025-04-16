@@ -22,6 +22,6 @@ function g3 = dynamic_g3(T, y, x, params, steady_state, it_, T_flag)
 if T_flag
     T = bolivia_sentiment_model_cleaned.dynamic_g3_tt(T, y, x, params, steady_state, it_);
 end
-g3 = sparse([],[],[],10,10648);
+g3 = sparse([],[],[],6,4096);
 
 end

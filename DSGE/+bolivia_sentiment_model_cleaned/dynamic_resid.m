@@ -22,16 +22,12 @@ function residual = dynamic_resid(T, y, x, params, steady_state, it_, T_flag)
 if T_flag
     T = bolivia_sentiment_model_cleaned.dynamic_resid_tt(T, y, x, params, steady_state, it_);
 end
-residual = zeros(10, 1);
-    residual(1) = (y(6)) - (0.9*y(16)-1/params(2)*(y(8)-y(17))-params(9)*y(10));
-    residual(2) = (y(7)) - (y(17)*params(1)+params(6)*y(1)+y(6)*params(7)+params(8)*(y(9)-y(3))+x(it_, 3));
-    residual(3) = (y(8)) - (y(18)-y(9)+y(10)*params(10)+y(11));
-    residual(4) = (y(8)) - (params(5)*y(2)+(1-params(5))*(y(7)*params(3)+y(6)*params(4))+x(it_, 4));
-    residual(5) = (y(10)) - (params(11)*y(4)+x(it_, 1));
-    residual(6) = (y(11)) - (params(12)*y(5)+x(it_, 2));
-    residual(7) = (y(12)) - (y(7));
-    residual(8) = (y(13)) - (y(6));
-    residual(9) = (y(14)) - (y(9));
-    residual(10) = (y(15)) - (y(10));
+residual = zeros(6, 1);
+    residual(1) = (y(5)) - (y(11)-params(12)*(y(7)-y(12))-params(8)*y(9));
+    residual(2) = (y(6)) - (y(12)*params(1)+y(5)*params(6)+params(7)*(y(8)-y(2))+x(it_, 3));
+    residual(3) = (y(7)) - (params(5)*y(1)+(1-params(5))*(y(6)*params(4)+y(5)*params(3))+x(it_, 4));
+    residual(4) = (y(8)) - (y(2)+y(9)*params(9)+y(10));
+    residual(5) = (y(9)) - (params(10)*y(3)+x(it_, 1));
+    residual(6) = (y(10)) - (params(11)*y(4)+x(it_, 2));
 
 end
