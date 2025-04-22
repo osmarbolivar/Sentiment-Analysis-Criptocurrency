@@ -1,5 +1,5 @@
 //============================================================
-//  DSGE Model
+//  DSGE Model with Hybrid Phillips Curve (Calibrated for Bolivia)
 //============================================================
 
 // 1. Declaring Endogenous Variables
@@ -11,7 +11,6 @@ var x pi i e s psi;
 // s   = economic uncertainty sentiment
 // psi = risk premium or exchange-rate shock
 
-
 // 2. Declaring Exogenous Shocks
 varexo eps_s eps_psi eps_u eps_i; 
 // eps_s   = sentiment shock
@@ -19,75 +18,61 @@ varexo eps_s eps_psi eps_u eps_i;
 // eps_u   = cost-push (markup) shock
 // eps_i   = monetary policy shock
 
-
 // 3. Declaring Model Parameters
-parameters beta sigma phi_x phi_pi rho_i kappa phi_e phi_s gamma_s rho_s rho_psi phi;
-// beta      = discount factor
-// sigma     = intertemporal elasticity of substitution
-// phi_x     = weight on x in the Taylor rule (policy output response)
-// phi_pi    = weight on pi in the Taylor rule (policy inflation response)
-// rho_i     = interest rate smoothing
-// kappa     = slope of the New Keynesian Phillips curve
-// phi_e     = pass-through from exchange rate changes to inflation
-// phi_s     = effect of sentiment on x (IS curve)
-// gamma_s   = effect of sentiment on e (exchange rate eq)
-// rho_s     = persistence of sentiment AR(1)
-// rho_psi   = persistence of risk premium AR(1)
-// phi       = 1/sigma in the IS or can be direct sensitivity param
+parameters 
+  beta sigma phi_x phi_pi rho_i kappa phi_e phi_s 
+  gamma_s rho_s rho_psi phi gamma_f gamma_b rho_x;    
+// gamma_f = weight on forward-looking inflation in hybrid NKPC
+// gamma_b = weight on backward-looking inflation in hybrid NKPC
+// rho_x   = persistence of the output gap
 
-
-// 4. Calibration of Parameters
-beta   = 0.997;    // monthly discount factor (~4% annual)
-sigma  = 1.0;      // CRRA or 1 / Intertemporal elasticity
-phi    = 1.0;      // 1/sigma if desired, or separate sensitivity
-phi_x  = 0.2;      // small output weight in Taylor rule
-phi_pi = 1.8;      // strong inflation response => determinacy
-rho_i  = 0.7;      // partial interest-rate smoothing
-kappa  = 0.06;     // slope of NKPC (sticky prices)
-phi_e  = 0.15;     // pass-through from exchange rate to inflation
-phi_s  = 0.3;      // effect of sentiment on x (IS curve)
-gamma_s= 0.1;      // effect of sentiment on e
-rho_s  = 0.6;      // AR(1) persistence for sentiment
-rho_psi= 0.5;      // AR(1) persistence for risk premium
+// 4. Calibration of Parameters (Monthly, Bolivia & Emerging Markets)
+beta    = 0.997;      // monthly discount factor (~4% annual)
+sigma   = 2.2249;     // CRRA elasticity (Valdivia 2016)
+phi     = 1/sigma;    // sensitivity to real interest rate
+phi_x   = 6.9070;     // Taylor rule output response (Valdivia & Montenegro, 2009)
+phi_pi  = 1.6409;     // Taylor rule inflation response (Valdivia & Montenegro, 2009)
+rho_i   = 0.96;       // interest-rate smoothing (Valdivia & Montenegro, 2009)
+kappa   = 0.242;      // NKPC slope (Mendieta, 2010)
+phi_e   = 0.193;      // exchange-rate passthrough to inflation (Murillo Reyes, 2014)
+phi_s   = 0.30;       // sentiment effect on output (Valdivia, 2016)
+gamma_s = 0.10;       // sentiment effect on exchange rate (Valdivia, 2016)
+rho_s   = 0.60;       // persistence of sentiment AR(1) (Valdivia, 2016)
+rho_psi = 0.50;       // persistence of risk premium AR(1) (Sánchez et al., 2023)
+gamma_f = 0.4966;     // forward weight in hybrid NKPC (Murillo Reyes, 2014)
+gamma_b = 0.4581;     // backward weight in hybrid NKPC (Murillo Reyes, 2014)
+rho_x   = 0.5;        // persistence of output gap (literatura estándar, Gali 2015)
 
 // 5. Model Equations (Linearized)
 model(linear);
 
-  // (1) Forward-Looking IS Equation:
-  // x_t = E_t[x_{t+1}] - (1/sigma)*(i_t - E_t[pi_{t+1}]) - phi_s*s_t
-  x = x(+1) - phi*( i - pi(+1) ) - phi_s*s;
+  // (1) Forward-Looking & Persistent IS Equation
+  x = rho_x * x(-1) + (1 - rho_x) * x(+1) - phi * ( i - pi(+1) ) - phi_s * s;
 
-  // (2) New Keynesian Phillips Curve:
-  // pi_t = beta*pi_{t+1} + kappa*x_t + phi_e*(e_t - e_{t-1}) + eps_u
-  pi = beta*pi(+1) + kappa*x + phi_e*( e - e(-1) ) + eps_u;
+  // (2) Hybrid New Keynesian Phillips Curve
+  pi = gamma_f * beta * pi(+1) + gamma_b * pi(-1) + kappa * x + phi_e * ( e - e(-1) ) + eps_u;
 
-  // (3) Monetary Policy Rule (Taylor):
-  // i_t = rho_i * i_{t-1} + (1-rho_i)*( phi_pi*pi_t + phi_x*x_t ) + eps_i
-  i = rho_i*i(-1) + (1 - rho_i)*( phi_pi*pi + phi_x*x ) + eps_i;
+  // (3) Monetary Policy Rule (Taylor)
+  i = rho_i * i(-1) + (1 - rho_i) * ( phi_pi * pi + phi_x * x ) + eps_i;
 
-  // (4) Exchange Rate Determination:
-  // e_t = e_{t-1} + gamma_s*s_t + psi_t
-  e = e(-1) + gamma_s*s + psi;
+  // (4) Exchange Rate Determination
+  e = e(-1) + gamma_s * s + psi;
 
-  // (5) Sentiment AR(1):
-  // s_t = rho_s*s_{t-1} + eps_s
-  s = rho_s*s(-1) + eps_s;
+  // (5) Sentiment AR(1)
+  s = rho_s * s(-1) + eps_s;
 
-  // (6) Risk Premium AR(1):
-  // psi_t = rho_psi*psi_{t-1} + eps_psi
-  psi = rho_psi*psi(-1) + eps_psi;
+  // (6) Risk Premium AR(1)
+  psi = rho_psi * psi(-1) + eps_psi;
 
 end;
-
 
 // 6. Exogenous Shock Variances
 shocks;
-  var eps_s;   stderr 0.5; // Sentiment shock
-  var eps_psi; stderr 0.4; // Risk premium shock
-  var eps_u;   stderr 0.3; // Cost-push shock
-  var eps_i;   stderr 0.2; // Monetary policy shock
+  var eps_s;   stderr 0.5;  // sentiment shock
+  var eps_psi; stderr 0.4;  // risk premium shock
+  var eps_u;   stderr 0.3;  // cost-push shock
+  var eps_i;   stderr 0.2;  // monetary policy shock
 end;
-
 
 // 7. Steady State & Checks
 initval;
@@ -102,5 +87,5 @@ end;
 steady;
 check;
 
-// 8. Simulation (No Bayesian Estimation)
+// 8. Simulation (IRFs for 24 periods)
 stoch_simul(order=1, irf=24);
