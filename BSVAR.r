@@ -4,7 +4,7 @@
 # Author: Osmar Bolivar
 # Endogenous variables: s (sentiment), e (exchange), inf (inflation)
 # Sample: 2023-01-01 to 2025-04-11
-# 7 lags, default priors, impact-only restrictions
+# 9 lags, default priors, impact-only restrictions
 #============================================================
 
 # 1. Install & load packages
