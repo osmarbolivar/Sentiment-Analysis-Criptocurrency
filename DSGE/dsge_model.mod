@@ -1,19 +1,19 @@
-//============================================================
-//  DSGE Model with Hybrid Phillips Curve (Calibrated for Bolivia)
-//============================================================
+//=======================================================================================
+//  DSGE Model: Sentiment, Cryptocurrency and Inflation: A Transmission Chanel in Bolivia
+//=======================================================================================
 
 // 1. Declaring Endogenous Variables
 var x pi i e s psi; 
 // x   = output gap
 // pi  = inflation
 // i   = nominal interest rate
-// e   = parallel exchange rate (deviation from peg)
-// s   = economic uncertainty sentiment
+// e   = parallel digital exchange rate (BOB/USDT exchange rate)
+// s   = economic uncertainty sentiment index
 // psi = risk premium or exchange-rate shock
 
 // 2. Declaring Exogenous Shocks
 varexo eps_s eps_psi eps_u eps_i; 
-// eps_s   = sentiment shock
+// eps_s   = uncertainty sentiment shock
 // eps_psi = risk premium shock
 // eps_u   = cost-push (markup) shock
 // eps_i   = monetary policy shock
@@ -28,16 +28,16 @@ parameters
 
 // 4. Calibration of Parameters (Monthly, Bolivia & Emerging Markets)
 beta    = 0.997;      // monthly discount factor (~4% annual) 
-sigma   = 2.2249;     // CRRA elasticity (Valdivia 2016) ok
-phi     = 1/sigma;    // sensitivity to real interest rate ok
-phi_x   = 6.9070;     // Taylor rule output response (Valdivia & Montenegro, 2009) ok
-phi_pi  = 1.25;     // Taylor rule inflation response (Valdivia & Montenegro, 2009) ok
+sigma   = 2.2249;     // CRRA elasticity (Valdivia 2016)
+phi     = 1/sigma;    // sensitivity to real interest rate
+phi_x   = 6.9070;     // Taylor rule output response (Valdivia & Montenegro, 2009)
+phi_pi  = 1.25;     // Taylor rule inflation response (Valdivia & Montenegro, 2009)
 rho_i   = 0.8458;       // interest-rate smoothing (Mendieta, 2010)
 kappa   = 0.242;      // NKPC slope (Mendieta, 2010)
 phi_e   = 0.193;      // exchange-rate passthrough to inflation Mendieta, 2010)
-phi_s   = 0.0737;       // sentiment effect on output (para que calce con la correlación)
+phi_s   = 0.0737;       // sentiment effect on output (calibrated to replicate empirical correlation)
 gamma_s = 0.10;       // sentiment effect on exchange rate (Valdivia, 2016)
-rho_s   = 0.60;       // persistence of sentiment AR(1) estimado
+rho_s   = 0.60;       // Estimated persistence of sentiment AR(1)
 rho_psi = 0.50;       // persistence of risk premium AR(1) (Sánchez et al., 2023)
 gamma_f = 0.4966;     // forward weight in hybrid NKPC (Valdivia & Montenegro, 2009)
 gamma_b = 0.4581;     // backward weight in hybrid NKPC (Valdivia & Montenegro, 2009)
@@ -69,8 +69,8 @@ end;
 
 // 6. Exogenous Shock Variances
 shocks;
-  var eps_s;   stderr 0.5;  // sentiment shock
-  var eps_psi; stderr 0.4;  // risk premium shock
+  var eps_s;   stderr 0.5;  // uncertainty sentiment shock
+  var eps_psi; stderr 0.4;  // risk premium (exchange rate) shock 
   var eps_u;   stderr 0.3;  // cost-push shock
   var eps_i;   stderr 0.2;  // monetary policy shock
 end;
